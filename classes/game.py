@@ -24,11 +24,12 @@ class Person:
 
     def generate_damage(self):
         return random.randrange(self.atkl, self.atkh)
+    
+    def get_hp(self):
+        return self.hp
 
-    def generate_spell_damage(self, i):
-        mgl = self.magic[i]["dmg"] - 5
-        mgh = self.magic[i]["dmg"] + 5
-        return random.randrange(mgl, mgh)
+    def get_max_hp(self):
+        return self.maxhp
 
     def take_damage(self, dmg):
         self.hp -= dmg
@@ -36,12 +37,9 @@ class Person:
             self.hp = 0
 
         return self.hp
-    
-    def get_hp(self):
-        return self.hp
 
-    def get_max_hp(self):
-        return self.maxhp
+    def heal(self, heal_points):
+        self.hp += heal_points
 
     def get_mp(self):
         return self.mp
@@ -69,5 +67,5 @@ class Person:
         i = 1
         print("\nMagic spells:")
         for spell in self.magic:
-            print(str(i) + ":", spell["name"], "(cost:", str(spell["cost"]) + ")")
+            print(str(i) + ":", spell.name, "(cost:", str(spell.cost) + ")")
             i += 1

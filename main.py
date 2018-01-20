@@ -1,11 +1,20 @@
 from classes.game import Person, bcolors
+from classes.magic import Spell
 
-magic = [{"name": "Fire", "cost": 10, "dmg": 100},
-        {"name": "Thunder", "cost": 10, "dmg": 124},
-        {"name": "Blizzard", "cost": 10, "dmg": 100}]
+# Create Black Magic
+fire = Spell("Fire", 10, 100, "black")
+thunder = Spell("Thunder", 10, 100, "black")
+blizzard = Spell("Blizzard", 10, 100, "black")
+meteor = Spell("Meteor", 20, 200, "black")
+quake = Spell("Quake", 14, 140, "black")
 
-player = Person(500, 65, 60, 34, magic)
-enemy = Person(1200, 65, 45, 25, magic)
+# Create White Magic
+cure = Spell("Cure", 12, 120, "white")
+cura = Spell("Cura", 18, 200, "white")
+
+# Instantiate Characters
+player = Person(500, 65, 60, 34, [fire, thunder, blizzard, meteor, quake, cure, cura])
+enemy = Person(1200, 65, 45, 25, [])
 
 running = True
 
@@ -25,18 +34,25 @@ while running:
     elif index == 1:
         player.choose_magic()
         magic_choice = int(input("Choose magic: ")) - 1
-        magic_dmg = player.generate_spell_damage(magic_choice)
-        spell = player.get_spell_name(magic_choice)
-        cost = player.get_spell_mp_cost(magic_choice)
-        current_mp = player.get_mp()
 
-        if current_mp < cost:
+        spell = player.magic[magic_choice]
+        spell_cost = spell.cost
+        magic_dmg = spell.generate_damage()
+
+        current_mp = player.get_mp()
+        
+        if spell.cost > current_mp:
             print(bcolors.FAIL + "\nYou ran out of Magic" + bcolors.ENDC)
             continue
 
-        player.reduce_mp(cost)
-        enemy.take_damage(magic_dmg)
-        print(bcolors.OKBLUE + "\n" + spell + " deals", str(magic_dmg), "points of damage to the enemy" + bcolors.ENDC)
+        player.reduce_mp(spell_cost)
+
+        if spell.type == "white":
+            player.heal(magic_dmg)
+            print(bcolors.OKBLUE + "\n" + spell.name + " heals for", str(spell.dmg), "HP" + bcolors.ENDC)
+        elif spell.type == "black":
+            enemy.take_damage(magic_dmg)
+            print(bcolors.OKBLUE + "\n" + spell.name + " deals", str(spell.dmg), "points of damage" + bcolors.ENDC)
 
     if enemy.get_hp() == 0:
         print(bcolors.OKGREEN + "You win!!" + bcolors.ENDC)
