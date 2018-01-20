@@ -86,12 +86,6 @@ while running:
             player.heal(item.prop)
             print(bcolors.OKGREEN + "\n" + item.name + " heals for", str(item.prop), "HP" + bcolors.ENDC)
 
-    if enemy.get_hp() == 0:
-        print(bcolors.OKGREEN + "You win!!" + bcolors.ENDC)
-        running = False
-    
-    print("\nEnemy attacks you!")
-
     enemy_choice = 1
 
     enemy_dmg = enemy.generate_damage()
@@ -105,4 +99,7 @@ while running:
 
     if player.get_hp() == 0:
         print(bcolors.FAIL + "Your enemy defeated you..." + bcolors.ENDC)
+        running = False
+    elif enemy.get_hp() == 0:
+        print(bcolors.OKGREEN + "You win!!" + bcolors.ENDC)
         running = False
